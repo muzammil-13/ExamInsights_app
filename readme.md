@@ -80,12 +80,12 @@ We welcome contributions to ExamInsight! If you'd like to improve or expand the 
 
 Please ensure that your code adheres to the project's coding standards and includes appropriate tests.
 
-## Contact Information
+<!-- ## Contact Information
 
 For questions, suggestions, or collaboration opportunities, please contact:
 
 - [Your Name]
 - Email: [your.email@example.com]
-- GitHub: [@yourusername]
+- GitHub: [@yourusername] -->
 
 We look forward to hearing from you and seeing how ExamInsight can help improve exam preparation and analysis!
