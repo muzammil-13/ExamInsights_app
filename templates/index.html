@@ -1,0 +1,18 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExamInsight</title>
+</head>
+<body>
+    <h1>ExamInsight</h1>
+    <form id="upload-form">
+        <input type="file" id="exam-paper" accept=".pdf">
+        <button type="submit">Analyze</button>
+    </form>
+    <div id="results"></div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

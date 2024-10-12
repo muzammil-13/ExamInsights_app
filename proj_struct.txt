@@ -1,0 +1,11 @@
+# basic but functional prototype of ExamInsight
+
+ExamInsight/
+│
+├── app.py
+├── exam_analyzer.py
+├── requirements.txt
+├── templates/
+│   └── index.html
+└── static/
+    └── script.js

@@ -1,0 +1,4 @@
+Flask==2.0.1
+Werkzeug==2.0.1
+nltk==3.6.2
+PyPDF2==1.26.0
