@@ -1,0 +1,16 @@
+Folder PATH listing
+Volume serial number is 3E10-6A5B
+C:.
+¦   .env
+¦   app.py
+¦   config.yaml
+¦   Dockerfile
+¦   project_structure.txt
+¦   README.md
+¦   requirements.txt
+¦   streamlit_app.py
+¦   
++---data
+        bsc-bca-3-sem-data-structure-using-cpp-22100730-apr-2022.pdf
+        sample-BCA_s4_dsa_Qs.pdf
+        
