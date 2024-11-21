@@ -69,7 +69,7 @@ Ready to experience the power of ExamInsight? Follow these steps:
 
 ### Demo
 
-![Examinsights llm app working demo - Made with Clipchamp.gif](Examinsights llm app working demo - Made with Clipchamp.gif)
+![Examinsights llm app working demo](<Examinsights llm app working demo - Made with Clipchamp.gif>)
 
 ### Contributing
 
