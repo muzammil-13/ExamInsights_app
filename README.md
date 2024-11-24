@@ -6,7 +6,7 @@ Welcome to ExamInsight, a powerful application powered by the cutting-edge Pathw
 
 ExamInsight ingests data from PDFs of exam papers stored in its `data` folder and presents insightful analysis through an interactive Streamlit interface. Built with Pathway, Docker, and Streamlit, this application runs seamlessly in a production-ready, containerized environment. Its in-memory scalable vector store ensures efficient handling of data and adapts in real-time to any changes made to the PDFs. This means you're always working with the most up-to-date information, ensuring accurate analysis and relevant insights.
 
-## Project Initialization Date
+### Project Initialization Date
 
 This project was initialized on 1**0/10/2024**. For a detailed sequence of commands executed during the project setup, please refer to [initial-commands.md](./initial-commands.md).
 
