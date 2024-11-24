@@ -50,8 +50,8 @@ Ready to experience the power of ExamInsight? Follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/muzammil-13/ExamInsights_app.git
+   cd ExamInsights_app
    ```
 2. Build the Docker image:
    ```bash
