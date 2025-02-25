@@ -3,7 +3,7 @@ python-dotenv==1.0.1
 mpmath==1.3.0
 litellm==1.35.0
 google-generativeai==0.3.2
-sentence-transformers==2.3.1
+sentence-transformers==2.4.0
 streamlit==1.31.0
 requests==2.31.0
 PyYAML==6.0.1
