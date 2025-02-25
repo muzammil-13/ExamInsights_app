@@ -67,9 +67,34 @@ Ready to experience the power of ExamInsight? Follow these steps:
 * **Adding PDFs:** Place your PDF files in the `data` folder.
 * **Connecting Google Drive:** Follow the instructions in the documentation to configure Google Drive integration for live updates.
 
+**Adding API Key:**
+
+Some features of ExamInsight may require an API key. To add your API key:
+
+1. Create a [.env](vscode-file://vscode-app/c:/Users/muzam/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html) file in the root directory of the project.
+2. Add your API key to the [.env](vscode-file://vscode-app/c:/Users/muzam/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html) file. For example:
+
+   ```
+   # filepath: /path/to/.env
+   API_KEY=your_api_key_here
+   ```
+3. Ensure your application reads the [.env](vscode-file://vscode-app/c:/Users/muzam/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-sandbox/workbench/workbench.html) file. You can use a library like `python-dotenv` to load the environment variables. For example, in your main application file:
+
+   ```
+   # filepath: /path/to/main_application_file.py
+   from dotenv import load_dotenv
+   import os
+
+   load_dotenv()
+
+   api_key = os.getenv('API_KEY')
+   # ...existing code...
+   ```
+4. Save the file and restart the application if it is already running.
+
 ### Demo
 
-![Examinsights llm app working demo](<Examinsights llm app working demo - Made with Clipchamp.gif>)
+![Examinsights llm app working demo](Examinsights llm app working demo - Made with Clipchamp.gif)
 
 ### Contributing
 
