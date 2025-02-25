@@ -1,21 +1,41 @@
+# Build stage
 FROM python:3.11-slim as builder
+
 WORKDIR /app
+
+# Install build dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     build-essential \
     python3-opencv && \
     rm -rf /var/lib/apt/lists/*
-COPY requirements.txt .
-RUN --mount=type=cache,target=/root/.cache/pip pip install --user --no-cache-dir -r requirements.txt
 
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+# Runtime stage
 FROM python:3.11-slim
+
 WORKDIR /app
+
+# Copy only necessary Python packages from builder
+COPY --from=builder /root/.local /root/.local
+
+# Install runtime dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     python3-opencv && \
     rm -rf /var/lib/apt/lists/*
-COPY --from=builder /root/.local /root/.local
+
+# Set Python path
 ENV PATH=/root/.local/bin:$PATH
+
+# Copy application code
 COPY . .
+
+# Expose ports
 EXPOSE 8000 8501
+
+# Run the application
 CMD ["sh", "-c", "python app.py & streamlit run streamlit_app.py"]
