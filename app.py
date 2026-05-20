@@ -24,27 +24,49 @@ logging.basicConfig(
 
 load_dotenv()
 
+
+def normalize_source_config(source_config: dict) -> dict:
+    """Support both the old nested YAML shape and the current flat source shape."""
+    if "kind" in source_config:
+        return source_config
+
+    for name, config in source_config.items():
+        if isinstance(config, dict) and "kind" in config:
+            return {"name": name, **config}
+
+    raise ValueError(f"Invalid source configuration: {source_config}")
+
+
 def data_sources(source_configs) -> list[pw.Table]:
     sources = []
-    for source_config in source_configs:
+    for raw_source_config in source_configs:
+        source_config = normalize_source_config(raw_source_config)
+        source_name = source_config.get("name", source_config["kind"])
+
         if source_config["kind"] == "local":
             source = pw.io.fs.read(
                 **source_config["config"],
                 format="binary",
                 with_metadata=True,
+                name=source_name,
             )
             sources.append(source)
         elif source_config["kind"] == "gdrive":
             source = pw.io.gdrive.read(
                 **source_config["config"],
                 with_metadata=True,
+                name=source_name,
             )
             sources.append(source)
         elif source_config["kind"] == "sharepoint":
             try:
                 import pathway.xpacks.connectors.sharepoint as io_sp
 
-                source = io_sp.read(**source_config["config"], with_metadata=True)
+                source = io_sp.read(
+                    **source_config["config"],
+                    with_metadata=True,
+                    name=source_name,
+                )
                 sources.append(source)
             except ImportError:
                 print(
@@ -52,6 +74,8 @@ def data_sources(source_configs) -> list[pw.Table]:
                     "please contact us for a commercial license."
                 )
                 sys.exit(1)
+        else:
+            raise ValueError(f"Unsupported source kind: {source_config['kind']}")
 
     return sources
 
@@ -90,7 +114,11 @@ def run(config_file: str = "config.yaml"):
 
     rag_app.build_server(host=host, port=port)
 
-    rag_app.run_server(with_cache=True, terminate_on_error=False)
+    cache_options = configuration.get("cache_options", {})
+    rag_app.run_server(
+        with_cache=cache_options.get("with_cache", True),
+        terminate_on_error=False,
+    )
 
 if __name__ == "__main__":
     run()

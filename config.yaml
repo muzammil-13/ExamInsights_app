@@ -7,13 +7,16 @@ cache_options:
   with_cache: True
   cache_folder: "./Cache"
 sources:
-  - local_files:
+  - name: local_files
     kind: local
     config:
       # Please refer to
       # https://pathway.com/developers/api-docs/pathway-io/fs#pathway.io.fs.read
       # for options definition
       path: "data/"
+      mode: "streaming"
+      object_pattern: "*.pdf"
+      autocommit_duration_ms: 1500
   # - google_drive_folder:
   #   kind: gdrive
   #   config:

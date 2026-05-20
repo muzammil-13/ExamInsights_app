@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.env
+data/pw_dump_images/
+data/pw_dump_files/
