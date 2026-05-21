@@ -1,16 +1,26 @@
-Folder PATH listing
-Volume serial number is 3E10-6A5B
-C:.
-¦   .env
-¦   app.py
-¦   config.yaml
-¦   Dockerfile
-¦   project_structure.txt
-¦   README.md
-¦   requirements.txt
-¦   streamlit_app.py
-¦   
+Examinsights_app:
+|   .env
+|   .env.example
+|   .gitignore
+|   app.py
+|   config.yaml
+|   Dockerfile
+|   Exam insights Status Review.md
+|   Examinsights llm app working demo - Made with Clipchamp.gif
+|   initial-commands.md
+|   LICENSE
+|   PLAN.md
+|   project_structure.txt
+|   README.md
+|   requirements.txt
+|   streamlit_app.py
+|   
 +---data
-        bsc-bca-3-sem-data-structure-using-cpp-22100730-apr-2022.pdf
-        sample-BCA_s4_dsa_Qs.pdf
+|       bsc-bca-3-sem-data-structure-using-cpp-22100730-apr-2022.pdf
+|       sample-BCA_s4_dsa_Qs.pdf
+|       
++---image
+\---__pycache__
+        app.cpython-311.pyc
+        streamlit_app.cpython-311.pyc
         

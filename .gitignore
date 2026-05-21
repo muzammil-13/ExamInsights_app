@@ -3,3 +3,8 @@ __pycache__/
 .env
 data/pw_dump_images/
 data/pw_dump_files/
+.venv
+Cache/
+.vscode/
+logs/
+*.log

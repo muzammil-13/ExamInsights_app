@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from typing import Any, Dict, Union
 
 import requests
 import streamlit as st
@@ -20,6 +21,7 @@ ROLE_GUIDANCE = {
             "revision steps."
         ),
         "presets": {
+            "Custom question (type below)": "",
             "Likely exam topics": (
                 "Identify the most likely exam topics from the uploaded papers. "
                 "Explain why each topic matters and suggest a revision order."
@@ -42,6 +44,7 @@ ROLE_GUIDANCE = {
             "teaching insights."
         ),
         "presets": {
+            "Custom question (type below)": "",
             "Topic frequency analysis": (
                 "Analyze which topics appear most often across the uploaded papers "
                 "and group them by frequency."
@@ -63,6 +66,9 @@ def compose_prompt(role, preset, custom_prompt):
     role_config = ROLE_GUIDANCE[role]
     preset_prompt = role_config["presets"][preset]
     user_prompt = custom_prompt.strip() or preset_prompt
+
+    if not user_prompt:
+        return None
 
     return f"""
 {role_config["instruction"]}
@@ -93,7 +99,8 @@ def extract_answer(raw_response):
     return str(raw_response)
 
 
-def get_response(prompt):
+def get_response(prompt: str) -> Dict[str, Any]:
+    """Sends the formatted prompt to the Pathway backend and returns the JSON response."""
     headers = {
         "accept": "*/*",
         "Content-Type": "application/json",
@@ -108,7 +115,8 @@ def get_response(prompt):
     return response.json()
 
 
-def check_backend():
+def check_backend() -> bool:
+    """Checks if the Pathway backend is reachable."""
     try:
         response = requests.get(API_URL, timeout=5)
         return response.status_code < 500 or response.status_code in {404, 405}
@@ -116,7 +124,8 @@ def check_backend():
         return False
 
 
-def record_status(is_online):
+def record_status(is_online: bool) -> None:
+    """Updates the session state with the latest backend availability status."""
     st.session_state.backend_online = is_online
     st.session_state.last_synced = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -166,18 +175,21 @@ with st.form("question_form"):
 
     if submitted:
         prompt = compose_prompt(role, preset, custom_prompt)
-        with st.spinner("Analyzing past exams..."):
-            try:
-                raw_response = get_response(prompt)
-                record_status(True)
-                st.markdown("### Answer")
-                st.markdown(str(extract_answer(raw_response)))
-            except requests.exceptions.Timeout:
-                record_status(False)
-                st.error(
-                    "The backend took too long to respond. Try again after the "
-                    "index finishes syncing."
-                )
-            except requests.exceptions.RequestException as exc:
-                record_status(False)
-                st.error(f"Error communicating with the API: {exc}")
+        if not prompt:
+            st.warning("Please select an analysis preset or type a custom question.")
+        else:
+            with st.spinner("Analyzing past exams..."):
+                try:
+                    raw_response = get_response(prompt)
+                    record_status(True)
+                    st.markdown("### Answer")
+                    st.markdown(str(extract_answer(raw_response)))
+                except requests.exceptions.Timeout:
+                    record_status(False)
+                    st.error(
+                        "The backend took too long to respond. Try again after the "
+                        "index finishes syncing."
+                    )
+                except requests.exceptions.RequestException as exc:
+                    record_status(False)
+                    st.error(f"Error communicating with the API: {exc}")

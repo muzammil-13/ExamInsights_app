@@ -1,9 +1,10 @@
-pathway[all]>=0.11.0
+pathway
 python-dotenv==1.2.2
 mpmath==1.3.0
 litellm>=1.35
-Google-generativeai
-Sentence-transformers
+google-generativeai
+sentence-transformers
 streamlit
 requests
 PyYAML
+click

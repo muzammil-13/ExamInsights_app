@@ -1,0 +1,28 @@
+# Git
+.git
+.gitignore
+
+# Virtual Environments
+.venv
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables (prevents accidentally copying secrets)
+.env
+
+# IDE and local settings
+.vscode/
+.idea/
+
+# Application Cache and Logs
+Cache/
+logs/
+*.log
+data/pw_dump_images/
+data/pw_dump_files/
