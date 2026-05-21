@@ -65,6 +65,8 @@ http://localhost:8501
 
 ### Run Without Docker
 
+> **Note for Windows users:** The Pathway framework natively requires a Linux or macOS environment. If you are on Windows, we highly recommend using the **Run Locally With Docker** approach above. Alternatively, you can run the following commands inside **WSL 2 (Windows Subsystem for Linux)**.
+
 Install dependencies:
 
 ```bash
@@ -111,7 +113,7 @@ python app.py & streamlit run streamlit_app.py --server.address=0.0.0.0 --server
 
 ### Demo
 
-![Examinsights llm app working demo](<Examinsights llm app working demo - Made with Clipchamp.gif>)
+![Examinsights llm app working demo](image/Examinsights_demo.gif)
 
 ### Project Notes
 
