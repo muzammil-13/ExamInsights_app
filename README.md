@@ -67,6 +67,21 @@ http://localhost:8501
 
 > **Note for Windows users:** The Pathway framework natively requires a Linux or macOS environment. If you are on Windows, we highly recommend using the **Run Locally With Docker** approach above. Alternatively, you can run the following commands inside **WSL 2 (Windows Subsystem for Linux)**.
 
+If you are in WSL, use the Linux-style virtual environment path, not `\`:
+
+```bash
+source .venv/bin/activate
+```
+
+If `.venv` only has `Scripts/activate`, then it was created as a Windows virtual environment and will not activate properly in WSL. In that case, recreate it in WSL:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+You should then see `(.venv)` in the prompt.
+
 Install dependencies:
 
 ```bash
