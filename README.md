@@ -1,4 +1,4 @@
-## ExamInsights: Live RAG for Exam Paper Analysis
+# ExamInsights: Live RAG for Exam Paper Analysis
 
 ExamInsights helps students and educators analyze past exam papers with a Pathway-powered RAG backend and a Streamlit interface. Drop PDFs into the `data/` folder, ask role-specific questions, and get study or curriculum insights from the indexed papers.
 
@@ -19,6 +19,13 @@ The current milestone focuses on local real-time ingestion: Pathway watches the 
 - **Streamlit** provides the role selector, prompt presets, custom question box, backend status check, and answer display.
 - **LiteLLM/Gemini** powers answer generation through the configured model in `config.yaml`.
 - **Docker** runs the backend and frontend together for local use or hosted deployment.
+
+### Prerequisites
+
+Before you begin, ensure you have the following:
+- **Python 3.10+** (if running without Docker)
+- **Docker** (if running containerized)
+- **Gemini API Key** (or another LLM provider supported by LiteLLM)
 
 ### Configuration
 
@@ -129,6 +136,22 @@ python app.py & streamlit run streamlit_app.py --server.address=0.0.0.0 --server
 ### Demo
 
 ![Examinsights llm app working demo](image/Examinsights_demo.gif)
+
+### Screenshots
+
+**Student Mode Analysis**  
+![Student Mode](image/student_mode.png)
+
+**Educator Curriculum Insights**  
+![Educator Mode](image/educator_mode.png)
+
+**Live Backend Sync Status**  
+![Sync Status](image/sync_status.png)
+### Troubleshooting
+
+- **Backend Unreachable:** Ensure the Pathway backend is fully started and running on port `8000`. Use the "Sync now" button in the UI to check. If using custom ports, update `EXAMINSIGHTS_API_URL` accordingly.
+- **Empty Responses / LLM Errors:** Check that your `GEMINI_API_KEY` is valid and properly loaded from the `.env` file.
+- **No Data Retrieved:** Verify that your `.pdf` files are inside the `data/` folder and that Pathway has had time to ingest them.
 
 ### Project Notes
 

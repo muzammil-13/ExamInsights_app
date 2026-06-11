@@ -1,4 +1,5 @@
 import os
+import logging
 from datetime import datetime
 from typing import Any, Dict, Union
 
@@ -8,6 +9,36 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
+
+@st.cache_resource
+def setup_logger():
+    """Configures the logger exactly once per Streamlit server runtime."""
+    LOG_DIR = os.getenv("LOG_DIR", "/logs")
+    try:
+        os.makedirs(LOG_DIR, exist_ok=True)
+    except OSError:
+        LOG_DIR = "logs"
+        os.makedirs(LOG_DIR, exist_ok=True)
+
+    log_filename = os.path.join(LOG_DIR, f"streamlit_app_{datetime.now().strftime('%Y%m%d')}.log")
+    logger = logging.getLogger("streamlit_app")
+    logger.setLevel(logging.INFO)
+
+    if not logger.handlers:
+        console_handler = logging.StreamHandler()
+        console_formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+        console_handler.setFormatter(console_formatter)
+
+        file_handler = logging.FileHandler(log_filename)
+        file_formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+        file_handler.setFormatter(file_formatter)
+
+        logger.addHandler(console_handler)
+        logger.addHandler(file_handler)
+        logger.info(f"Streamlit UI initialized. Log file: {log_filename}")
+    return logger
+
+logger = setup_logger()
 
 API_URL = os.getenv("EXAMINSIGHTS_API_URL", "http://localhost:8000/v1/pw_ai_answer")
 TIMEOUT = int(os.getenv("EXAMINSIGHTS_TIMEOUT_SECONDS", "45"))
@@ -101,6 +132,7 @@ def extract_answer(raw_response):
 
 def get_response(prompt: str) -> Dict[str, Any]:
     """Sends the formatted prompt to the Pathway backend and returns the JSON response."""
+    logger.info(f"Sending prompt to backend: {prompt[:50]}...")
     headers = {
         "accept": "*/*",
         "Content-Type": "application/json",
@@ -112,15 +144,18 @@ def get_response(prompt: str) -> Dict[str, Any]:
         timeout=TIMEOUT,
     )
     response.raise_for_status()
+    logger.info("Successfully received response from backend")
     return response.json()
 
 
 def check_backend() -> bool:
     """Checks if the Pathway backend is reachable."""
+    logger.debug("Checking backend reachability...")
     try:
         response = requests.get(API_URL, timeout=5)
         return response.status_code < 500 or response.status_code in {404, 405}
     except requests.exceptions.RequestException:
+        logger.warning("Backend is unreachable.")
         return False
 
 
@@ -185,11 +220,13 @@ with st.form("question_form"):
                     st.markdown("### Answer")
                     st.markdown(str(extract_answer(raw_response)))
                 except requests.exceptions.Timeout:
+                    logger.error("Backend request timed out.")
                     record_status(False)
                     st.error(
                         "The backend took too long to respond. Try again after the "
                         "index finishes syncing."
                     )
                 except requests.exceptions.RequestException as exc:
+                    logger.error(f"Error communicating with the API: {exc}")
                     record_status(False)
                     st.error(f"Error communicating with the API: {exc}")
