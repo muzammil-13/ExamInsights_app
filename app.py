@@ -1,3 +1,4 @@
+import importlib
 import logging
 import sys
 import os
@@ -17,11 +18,16 @@ from pathway.xpacks.llm.vector_store import VectorStoreServer
 # To use Pathway Community, comment out the line below.
 pw.set_license_key("demo-license-key-with-telemetry")
 
-# Create logs directory if it doesn't exist
-os.makedirs("logs", exist_ok=True)
+# Create logs directory if it doesn't exist (target /logs/ path)
+LOG_DIR = os.getenv("LOG_DIR", "/logs")
+try:
+    os.makedirs(LOG_DIR, exist_ok=True)
+except OSError:
+    LOG_DIR = "logs"
+    os.makedirs(LOG_DIR, exist_ok=True)
 
 # Configure logging with both console and file handlers
-log_filename = os.path.join("logs", f"app_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
+log_filename = os.path.join(LOG_DIR, f"app_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -94,23 +100,32 @@ def data_sources(source_configs) -> list[pw.Table]:
             sources.append(source)
             logging.info(f"Google Drive source '{source_name}' loaded successfully")
         elif source_config["kind"] == "sharepoint":
-            try:
-                import pathway.xpacks.connectors.sharepoint as io_sp
+            io_sp = None
+            for module_name in (
+                "pathway.xpacks.connectors.sharepoint",
+                "pathway.xpacks.sharepoint",
+            ):
+                try:
+                    io_sp = importlib.import_module(module_name)
+                    break
+                except ImportError:
+                    continue
 
-                source = io_sp.read(
-                    **source_config["config"],
-                    with_metadata=True,
-                    name=source_name,
-                )
-                sources.append(source)
-                logging.info(f"SharePoint source '{source_name}' loaded successfully")
-            except ImportError:
-                logging.error("The Pathway Sharepoint connector is part of the commercial offering")
+            if io_sp is None:
+                logging.error("The Pathway SharePoint connector is part of the commercial offering")
                 print(
-                    "The Pathway Sharepoint connector is part of the commercial offering, "
+                    "The Pathway SharePoint connector is part of the commercial offering, "
                     "please contact us for a commercial license."
                 )
                 sys.exit(1)
+
+            source = io_sp.read(
+                **source_config["config"],
+                with_metadata=True,
+                name=source_name,
+            )
+            sources.append(source)
+            logging.info(f"SharePoint source '{source_name}' loaded successfully")
         else:
             logging.error(f"Unsupported source kind: {source_config['kind']}")
             raise ValueError(f"Unsupported source kind: {source_config['kind']}")
