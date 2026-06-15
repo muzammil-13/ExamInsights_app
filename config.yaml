@@ -1,5 +1,6 @@
 llm_config:
-  model: "gemini/gemini-pro"
+  model: "gemini/gemini-1.5-flash"
+  # or "gemini/gemini-1.5-pro"
 host_config:
   host: "0.0.0.0"
   port: 8000

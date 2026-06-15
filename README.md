@@ -23,6 +23,7 @@ The current milestone focuses on local real-time ingestion: Pathway watches the 
 ### Prerequisites
 
 Before you begin, ensure you have the following:
+
 - **Python 3.10+** (if running without Docker)
 - **Docker** (if running containerized)
 - **Gemini API Key** (or another LLM provider supported by LiteLLM)
@@ -139,14 +140,15 @@ python app.py & streamlit run streamlit_app.py --server.address=0.0.0.0 --server
 
 ### Screenshots
 
-**Student Mode Analysis**  
+**Student Mode Analysis**
 ![Student Mode](image/student_mode.png)
 
-**Educator Curriculum Insights**  
+**Educator Curriculum Insights**
 ![Educator Mode](image/educator_mode.png)
 
-**Live Backend Sync Status**  
+**Live Backend Sync Status**
 ![Sync Status](image/sync_status.png)
+
 ### Troubleshooting
 
 - **Backend Unreachable:** Ensure the Pathway backend is fully started and running on port `8000`. Use the "Sync now" button in the UI to check. If using custom ports, update `EXAMINSIGHTS_API_URL` accordingly.
